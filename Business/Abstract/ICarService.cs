@@ -13,7 +13,11 @@ namespace Business.Abstract
 
         void Delete(Car car);
 
-        Car GetById(int carId);
+        Car GetCarById(int id);
+
+        List<Car> GetCarsByBrandId(int id);
+
+        List<Car> GetCarsByColorId(int id);
 
         List<Car> GetAll();
 

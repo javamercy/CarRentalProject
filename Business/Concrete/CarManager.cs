@@ -18,8 +18,20 @@ namespace Business.Concrete
 
         public void Add(Car car)
         {
-            _carDal.Add(car);
+            if (CheckIfNameIsLongEnough(car.Description) && CheckIfPriceHigherThanZero(car.DailyPrice))
+            {
+                _carDal.Add(car);
+                Console.WriteLine("Car has been added.");
+            }
+            else
+            {
+
+                throw new Exception("Please check car details!");
+            }
+
         }
+
+
 
         public void Delete(Car car)
         {
@@ -31,14 +43,36 @@ namespace Business.Concrete
             return _carDal.GetAll();
         }
 
-        public Car GetById(int carId)
+        public Car GetCarById(int id)
         {
-            return _carDal.GetById(carId);
+            return _carDal.Get(c => c.Id == id);
+        }
+
+        public List<Car> GetCarsByBrandId(int id)
+        {
+            return _carDal.GetAll(c => c.BrandId == id);
+        }
+
+        public List<Car> GetCarsByColorId(int id)
+        {
+            return _carDal.GetAll(c => c.ColorId == id);
         }
 
         public void Update(Car car)
         {
             _carDal.Update(car);
         }
+
+
+        private bool CheckIfNameIsLongEnough(string description)
+        {
+            return description.Length > 2;
+
+        }
+        private bool CheckIfPriceHigherThanZero(decimal dailyPrice)
+        {
+            return dailyPrice > 0;
+        }
+
     }
 }
