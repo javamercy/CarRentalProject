@@ -12,7 +12,7 @@ namespace ConsoleUI
         {
             //CarDetailsTest();
 
-            //RentalTest();
+            RentalTest();
 
             //UserTest();s
 
@@ -38,11 +38,13 @@ namespace ConsoleUI
         {
             RentalManager rentalManager = new RentalManager(new EfRentalDal());
 
+            rentalManager.Update(new Rental { Id = 5, CarId = 3, CustomerId = 2, RentDate = new DateTime(2022, 06, 15), ReturnDate = DateTime.Now });
+
             var result = rentalManager.GetAll();
 
             foreach (var rental in result.Data)
             {
-                Console.WriteLine("{0} - {1} - {2}", rental.CarId, rental.CustomerId, rental.RentDate);
+                Console.WriteLine("{0} - {1} - {2} - {3}", rental.CarId, rental.CustomerId, rental.RentDate, rental.ReturnDate);
             }
         }
 
