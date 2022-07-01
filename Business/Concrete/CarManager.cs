@@ -1,9 +1,13 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,17 +23,12 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
-            if (CheckIfNameIsLongEnough(car.Description) && CheckIfPriceHigherThanZero(car.DailyPrice))
-            {
-                _carDal.Add(car);
-                return new SuccessResult();
-            }
 
-
-            throw new Exception("Please check car details!");
-
+            _carDal.Add(car);
+            return new SuccessResult();
 
         }
 
@@ -51,7 +50,7 @@ namespace Business.Concrete
 
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.getCarDetails(),Messages.AllCarsListedWithDetails);
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.getCarDetails(), Messages.AllCarsListedWithDetails);
         }
 
         public IDataResult<List<Car>> GetCarsByBrandId(int id)
@@ -70,16 +69,6 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-
-        private bool CheckIfNameIsLongEnough(string description)
-        {
-            return description.Length > 2;
-
-        }
-        private bool CheckIfPriceHigherThanZero(decimal dailyPrice)
-        {
-            return dailyPrice > 0;
-        }
 
     }
 }
