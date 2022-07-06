@@ -13,8 +13,7 @@ namespace WebAPI.Controllers
     [ApiController]
     public class CarImagesController : ControllerBase
     {
-
-        ICarImageService _carImageService;
+        private readonly ICarImageService _carImageService;
 
         public CarImagesController(ICarImageService carImageService)
         {
@@ -37,7 +36,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getbycarid")]
-        public IActionResult GetById(int id)
+        public IActionResult GetByCarId(int id)
         {
             var result = _carImageService.GetByCarId(id);
 

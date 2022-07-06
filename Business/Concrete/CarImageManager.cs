@@ -34,7 +34,7 @@ namespace Business.Concrete
             }
 
 
-            carImage.ImagePath = _fileHelper.Upload(file, PathConstants.ImagesPath);
+            carImage.ImagePath = _fileHelper.Upload(file, PathConstants.ImagesRoot);
             SetImageDateToNow(carImage);
 
             _carImageDal.Add(carImage);
@@ -72,8 +72,8 @@ namespace Business.Concrete
         public IResult Update(IFormFile file, CarImage carImage)
         {
             carImage.ImagePath = _fileHelper.Update(
-                file, PathConstants.ImagesPath
-                + carImage.ImagePath, PathConstants.ImagesPath);
+                file, PathConstants.ImagesRoot
+                + carImage.ImagePath, PathConstants.ImagesRoot);
 
             _carImageDal.Update(carImage);
             return new SuccessResult();
