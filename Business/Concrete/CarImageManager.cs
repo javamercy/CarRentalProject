@@ -30,7 +30,7 @@ namespace Business.Concrete
             if (result != null)
             {
 
-                return new ErrorResult(result.Message);
+                return result;
             }
 
 
