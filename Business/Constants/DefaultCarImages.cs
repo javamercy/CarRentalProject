@@ -10,7 +10,7 @@ namespace Business.Constants
 
         public static List<CarImage> GetDefaultImages(int carId)
         {
-            List<CarImage> carImages = new List<CarImage> { new CarImage { CarId = carId, Date = DateTime.Now, ImagePath = PathConstants.ImagesPath + "teslalogo.jpg" } };
+            List<CarImage> carImages = new List<CarImage> { new CarImage { CarId = carId, Date = DateTime.Now, ImagePath = PathConstants.ImagesRoot + "teslalogo.jpg" } };
 
             return carImages;
         }
