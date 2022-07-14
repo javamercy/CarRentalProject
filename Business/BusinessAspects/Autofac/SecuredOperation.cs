@@ -1,7 +1,7 @@
 ﻿using Business.Constants;
 using Castle.DynamicProxy;
 using Core.Extensions;
-using Core.IoC;
+using Core.Utilities.IoC;
 using Core.Utilities.Interceptors;
 using Microsoft.AspNetCore.Http;
 using System;
