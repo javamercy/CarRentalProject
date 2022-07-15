@@ -2,6 +2,8 @@
 using Business.Autofac.BusinessAspects;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Business;
@@ -18,7 +20,7 @@ namespace Business.Concrete
 {
     public class CarManager : ICarService
     {
-        ICarDal _carDal;
+        private ICarDal _carDal;
 
         public CarManager(ICarDal carDal)
         {
@@ -27,66 +29,82 @@ namespace Business.Concrete
 
         [SecuredOperation("admin,car.add,car.admin")]
         [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Add(Car car)
         {
             var result = BusinessRules.Run(CheckIfCarCountLimitExceeded());
 
             if (result != null)
             {
-
                 return result;
             }
-
 
             _carDal.Add(car);
             return new SuccessResult();
 
         }
 
-
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Delete(Car car)
         {
             _carDal.Delete(car);
             return new SuccessResult();
         }
 
+        [CacheAspect]
         public IDataResult<List<Car>> GetAll()
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.AllCarsListed);
         }
 
+        [CacheAspect]
         public IDataResult<Car> GetById(int id)
         {
             return new SuccessDataResult<Car>(_carDal.Get(c => c.Id == id), Messages.CarListedById);
         }
 
+        [CacheAspect]
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.getCarDetails(), Messages.AllCarsListedWithDetails);
         }
 
+        [CacheAspect]
         public IDataResult<List<Car>> GetCarsByBrandId(int id)
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == id));
         }
 
+        [CacheAspect]
         public IDataResult<List<Car>> GetCarsByColorId(int id)
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id));
         }
 
+
         [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Update(Car car)
         {
             _carDal.Update(car);
             return new SuccessResult();
         }
 
+        [TransactionScopeAspect]
+        public IResult TransactionalOperation(Car car)
+        {
+            _carDal.Add(car);
+            _carDal.Update(car);
+
+            return new SuccessResult();
+        }
+
+
         private IResult CheckIfCarCountLimitExceeded()
         {
             var result = _carDal.GetAll();
 
-            if (result.Count < 5)
+            if (result.Count < 10)
             {
 
                 return new SuccessResult();
