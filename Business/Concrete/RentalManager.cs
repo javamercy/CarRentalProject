@@ -2,6 +2,7 @@
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,7 +11,7 @@ namespace Business.Concrete
 {
     public class RentalManager : IRentalService
     {
-        IRentalDal _rentalDal;
+        private IRentalDal _rentalDal;
 
 
         public RentalManager(IRentalDal rentalDal)
@@ -23,6 +24,7 @@ namespace Business.Concrete
         {
             if (CheckIfCarDelivered(rental.CarId))
             {
+                rental.RentDate = DateTime.Now;
                 _rentalDal.Add(rental);
                 return new SuccessResult("Araba kiralandı : " + rental.CarId);
             }
@@ -45,6 +47,16 @@ namespace Business.Concrete
         public IDataResult<Rental> GetById(int id)
         {
             return new SuccessDataResult<Rental>(_rentalDal.Get(r => r.Id == id));
+        }
+
+        public IDataResult<List<RentalDetailDto>> GetRentalDetails()
+        {
+            return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetails());
+        }
+
+        public IDataResult<List<RentalDetailDto>> GetRentalDetailsByBrandName(string brandName)
+        {
+            return new SuccessDataResult<List<RentalDetailDto>>(_rentalDal.GetRentalDetails(r => r.BrandName == brandName));
         }
 
         public IResult Update(Rental rental)

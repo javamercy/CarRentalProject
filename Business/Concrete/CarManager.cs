@@ -66,16 +66,21 @@ namespace Business.Concrete
         [CacheAspect]
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.getCarDetails(), Messages.AllCarsListedWithDetails);
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(), Messages.AllCarsListedWithDetails);
         }
 
-        [CacheAspect]
+        public IDataResult<List<CarDetailDto>> GetCarDetailsById(int id)
+        {
+            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.CarId == id));
+        }
+
+
         public IDataResult<List<Car>> GetCarsByBrandId(int id)
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == id));
         }
 
-        [CacheAspect]
+
         public IDataResult<List<Car>> GetCarsByColorId(int id)
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == id));
@@ -113,5 +118,7 @@ namespace Business.Concrete
 
             return new ErrorResult(Messages.CarCountLimitExceeded);
         }
+
+
     }
 }
