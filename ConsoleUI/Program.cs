@@ -58,7 +58,7 @@ namespace ConsoleUI
             {
                 if (result.Success)
                 {
-                    Console.WriteLine("{0} - {1} - {2}", carDetail.CarName.Trim(), carDetail.BrandName.Trim(), carDetail.ColorName.Trim());
+                    Console.WriteLine("{0} - {1} - {2}", carDetail.Description.Trim(), carDetail.BrandName.Trim(), carDetail.ColorName.Trim());
                     Console.WriteLine("--------------");
                     Console.WriteLine(result.Message);
                 }

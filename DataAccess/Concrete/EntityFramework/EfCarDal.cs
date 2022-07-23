@@ -27,7 +27,8 @@ namespace DataAccess.Concrete.EntityFramework
                              join color in context.Colors
                              on car.ColorId equals color.Id
 
-                             select new CarDetailDto { CarId = car.Id, BrandName = brand.Name, CarName = car.Description, ColorName = color.Name, DailyPrice = car.DailyPrice };
+
+                             select new CarDetailDto { CarId = car.Id, BrandId = brand.Id, BrandName = brand.Name, Description = car.Description, ColorId = color.Id, ColorName = color.Name, DailyPrice = car.DailyPrice, ImagePaths = (from images in context.CarImages where images.CarId == car.Id select images.ImagePath).ToList() };
 
 
                 return filter == null ? result.ToList() : result.Where(filter).ToList();

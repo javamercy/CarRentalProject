@@ -45,7 +45,7 @@ namespace Core.Utilities.Helpers.FileHelper
                 {
                     file.CopyTo(fileStream);
                     fileStream.Flush();
-                    return root + filePath;
+                    return filePath;
                 }
             }
 
